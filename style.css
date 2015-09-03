@@ -1,0 +1,46 @@
+body {
+	background-image: url('day.jpg');
+	height: 100%;
+	width: 100%;
+}
+.space {
+	height: 10px;
+}
+.cont {
+	border: 1pt solid blue;
+}
+h1{
+	color: yellow;
+	text-align: center
+}
+.label {
+	color: yellow;
+	font-size: 20px;
+}
+.text1 {
+	color: red;
+	font-size: 40px;
+}
+.label1 {
+	color: yellow;
+	font-size: 25px;
+}
+.label2 {
+	color: blue;
+	font-size: 25px;
+}
+.text {
+	color: red;
+	font-size: 20px;
+}
+img {
+	height:100px;
+	width:100px;
+}
+.day1 .day2 .day3 {
+	border : 1px solid blue;
+}
+
+
+
+
