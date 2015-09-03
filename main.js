@@ -1,12 +1,13 @@
 'use strict';
 $(document).ready(init);
 var results;
-
+var panelOpen = false;
 function init() {
 	$('#go').click(goClicked);
 	$('#goAuto').click(goClickedAuto);
 	$('#zipSearch').click(goClickedZip);
-	$('.btn').click(showForecasts);
+	$('.btn1').click(showForecasts);
+	$('.btn2').click(triggerImageDisplay);
 }
 function showForecasts(){
 	$('.outputweather').show();
@@ -33,20 +34,24 @@ function showForecasts(){
 	$('#forecastDay1').text(results.forecast.txt_forecast.forecastday[2].fcttext);
 	$('#forecastDay2').text(results.forecast.txt_forecast.forecastday[4].fcttext);
 	$('#forecastDay3').text(results.forecast.txt_forecast.forecastday[6].fcttext);
+	
 }
 function goClickedZip() {
 	var zip = $(".zip").val()
 	var promise = callAjax(zip);
+	$('.cont').hide();
 	promise.success(ondataSuccess);
 }
 function goClickedAuto() {
 	var promise = callAjax("autoip");
+	$('.cont').hide();
 	promise.success(ondataSuccess);
 }
 function goClicked(e) {
 	var $state = $(".stateName").val();
 	var $city = $(".cityName").val();
 	var promise = callAjax($state+"/"+$city);
+	$('.cont').hide();
 	promise.success(ondataSuccess);
 }
 function ondataSuccess(data){ondataSuccess
@@ -58,12 +63,12 @@ function callAjax(location){
 	return $.getJSON("http://api.wunderground.com/api/d9e83152e7e5e110/geolookup/conditions/forecast/q/"+location+".json");
 }
 function dispResults() {
-	
 	$('.cont').show();
+	$('.dispImages').hide();
 	var hr = (new Date().getHours());
 	console.log(hr);
 	if(hr>12)
-		$('body').css("background-image", "url(night.jpg)"); 
+		{$('body').css("background-image", "url(night.jpg)"); }
 	var loc = results.current_observation.display_location;
 	var loc2 = results.current_observation;
 	$(".location").text(loc.full);
@@ -74,5 +79,19 @@ function dispResults() {
 	$(".curricon").attr('src',loc2.icon_url);
 	$('.curriconText').text(loc2.weather);
 	
-
+	
+}
+function triggerImageDisplay(){
+	$('.dispImages').show();
+	var flickrPromise = getFlickrJson(results.current_observation.display_location.full);
+	var image = $('.dispImages');
+	flickrPromise.success(function(data) {
+		var imagesElements = data.items.map(function(o) { 
+			return $("<img/>", { src: o.media.m,class:"img2" });
+		});
+		image.append(imagesElements);
+	});
+}
+function getFlickrJson(location){
+	return $.getJSON("https://api.flickr.com/services/feeds/photos_public.gne?&format=json&tags=" + encodeURI(location) + "&jsoncallback=?");
 }
