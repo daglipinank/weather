@@ -64,7 +64,7 @@ function callAjax(location){
 }
 function dispResults() {
 	$('.cont').show();
-	$('.dispImages').hide();
+	$('.dispImages').empty();
 	var hr = (new Date().getHours());
 	console.log(hr);
 	if(hr>12)
